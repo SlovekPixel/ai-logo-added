@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Вход — Logo Overlay</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="card login-card">
+    <h1>Вход</h1>
+    {% if locked %}
+      <div class="alert alert-error" id="status">
+        Сайт заблокирован после слишком многих неверных попыток.
+        Разблокировать может только администратор командой
+        <code>python -m app unlock</code>.
+      </div>
+      <form id="login-form" class="hidden">
+        <label for="code">30-значный код доступа</label>
+        <input id="code" name="code" type="password" maxlength="30" minlength="30" disabled />
+        <button type="submit" disabled>Войти</button>
+      </form>
+    {% else %}
+      <p class="muted">Введите 30-значный код для доступа к приложению.</p>
+      <div class="alert alert-error hidden" id="status"></div>
+      <form id="login-form">
+        <label for="code">Код доступа</label>
+        <input
+          id="code"
+          name="code"
+          type="text"
+          maxlength="30"
+          minlength="30"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="30 символов"
+          required
+        />
+        <button type="submit" id="submit-btn">Войти</button>
+      </form>
+    {% endif %}
+  </main>
+  <script>
+    const form = document.getElementById("login-form");
+    const statusEl = document.getElementById("status");
+    if (form && !form.classList.contains("hidden")) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const code = document.getElementById("code").value.trim();
+        const btn = document.getElementById("submit-btn");
+        btn.disabled = true;
+        statusEl.classList.add("hidden");
+        try {
+          const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            window.location.href = "/app";
+            return;
+          }
+          statusEl.textContent = data.message || "Ошибка входа";
+          statusEl.classList.remove("hidden");
+          if (data.locked) {
+            window.location.reload();
+          }
+        } catch (err) {
+          statusEl.textContent = "Не удалось связаться с сервером";
+          statusEl.classList.remove("hidden");
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

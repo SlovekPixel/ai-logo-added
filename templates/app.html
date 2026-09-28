@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Наклейка логотипа</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <strong>Наклейка логотипа</strong>
+    <button type="button" class="linkish" id="logout-btn">Выйти</button>
+  </header>
+
+  <main class="layout">
+    <section class="card">
+      <h2>1. Пример фото</h2>
+      <p class="muted">Загрузите одно типичное фото — превью 1:1. Логотип — дефолтный SVG: на эталоне 1200px → 484×415.38, сверху 24px, слева 650px (может выходить за край кадра); на других фото масштабируется от высоты.</p>
+
+      <label class="default-check">
+        <input type="checkbox" id="use-defaults" />
+        <span>Использовать дефолтное пример-фото</span>
+      </label>
+
+      <label class="file-label">
+        <span>Пример фото для превью</span>
+        <input type="file" id="sample-input" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" />
+      </label>
+      <p class="muted" id="sample-info">Пример не загружен</p>
+
+      <div class="stage-wrap">
+        <div id="stage" class="stage stage-empty" aria-label="Превью на примере фото">
+          <img id="sample-preview" class="sample-preview hidden" alt="Пример фото" draggable="false" />
+          <img id="logo-preview" class="logo-preview hidden" alt="Логотип" draggable="false" />
+        </div>
+      </div>
+      <p class="muted" id="pos-status">Загрузите пример фото.</p>
+    </section>
+
+    <section class="card">
+      <h2>2. Папка с фото</h2>
+      <label class="file-label">
+        <span>Выбрать папку</span>
+        <input type="file" id="folder-input" webkitdirectory multiple />
+      </label>
+      <p class="muted" id="folder-info">Папка не выбрана</p>
+
+      <h2>3. Генерация</h2>
+      <button type="button" id="generate-btn" disabled>Сгенерировать</button>
+
+      <div id="progress-wrap" class="progress-wrap hidden">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <p id="progress-text" class="muted"></p>
+      </div>
+
+      <div id="result-wrap" class="hidden">
+        <a id="download-link" class="button" href="#">Скачать архив</a>
+        <p class="muted">Архив будет удалён через 20 минут. Исходные файлы уже удалены с сервера.</p>
+      </div>
+
+      <div class="alert alert-error hidden" id="error-box"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

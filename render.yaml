@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: ai-logo-added
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/status
+    envVars:
+      - key: ACCESS_CODE
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: MAX_FILES
+        value: "200"
+      - key: MAX_FILE_MB
+        value: "10"
+      - key: MAX_TOTAL_MB
+        value: "300"
+      - key: ZIP_TTL_MINUTES
+        value: "20"
